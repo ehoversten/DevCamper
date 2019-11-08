@@ -1,46 +1,56 @@
 const express = require('express');
+const { 
+  getAllBootcamps, 
+  getBootcamp, 
+  updateBootcamp, 
+  createBootcamp, 
+  deleteBootcamp 
+} = require('../controllers/bootcamps');
+
+
 const router = express.Router();
+
+// *** MORE ADVANCED ROUTES *** //
+router.route('/')
+    .get(getAllBootcamps)
+    .post(createBootcamp);
+
+
+router.route('/:id')
+    .get(getBootcamp)
+    .put(updateBootcamp)
+    .delete(deleteBootcamp);
+
+
 
 // *** STARTER ROUTES *** //
 // GET ALL ROUTE
-router.get('/', function (req, res) {
-  res.status(200).json({ successs: true, msg: 'show all bootcamps' });
-});
+// router.get('/', function (req, res) {
+//   getAllBootcamps();
+// });
 
 
-// CREATE NEW RESOURCE ROUTE
-router.post('/', function (req, res) {
-  res.status(200).json({ successs: true, msg: 'new bootcamp was created' });
-});
+// // CREATE NEW RESOURCE ROUTE
+// router.post('/', function (req, res) {
+//   createBootcamp();
+// });
 
 
-// GET SINGLE RESOURCE ROUTE
-router.get('/:id', function (req, res) {
-  res
-    .status(200)
-    .json({ successs: true, msg: `show bootcamp with id of ${req.params.id}` });
-});
+// // GET SINGLE RESOURCE ROUTE
+// router.get('/:id', function (req, res) {
+//   getBootcamp();
+// });
 
 
-// UPDATE RESOURCE ROUTE
-router.put('/:id', function (req, res) {
-  res
-    .status(200)
-    .json({
-      successs: true,
-      msg: `updated bootcamp with id of ${req.params.id}`
-    });
-});
+// // UPDATE RESOURCE ROUTE
+// router.put('/:id', function (req, res) {
+//   updateBootcamp();
+// });
 
 
-// DELETE RESOURCE ROUTE
-router.delete('/:id', function (req, res) {
-  res
-    .status(200)
-    .json({
-      successs: true,
-      msg: `deleted bootcamp with id of ${req.params.id}`
-    });
-});
+// // DELETE RESOURCE ROUTE
+// router.delete('/:id', function (req, res) {
+//   deleteBootcamp();
+// });
 
 module.exports = router;
