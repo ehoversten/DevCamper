@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
 
 // Route Controller
 const bootcamps = require('./routes/bootcamp');
@@ -10,6 +11,11 @@ dotenv.config({ path: './config/config.env' });
 // Create our Express Instance
 const app = express();  
 const PORT = process.env.PORT || 5000;
+
+// *** MIDDLEWARE *** //
+
+// Morgan MIDDLEWARE
+app.use(morgan('dev'));
 
 // Mount Routers
 app.use('/api/v1/devcamper', bootcamps);
