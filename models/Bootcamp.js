@@ -6,14 +6,14 @@ const BootCampSchema = new mongoose.Schema({
         required: true,
         unique: true,
         trim: true,
-        maxlength: [50, "Name can not be more than 50 characters"];
+        maxlength: [50, "Name can not be more than 50 characters"]
     },
     slug: String,
     description: {
         type: String,
         required: true,
         trim: true,
-        maxlength: [500, 'Description cannot be longer than 500 charactes'];
+        maxlength: [500, 'Description cannot be longer than 500 charactes']
     },
     website: {
         type: String,
@@ -29,7 +29,7 @@ const BootCampSchema = new mongoose.Schema({
     email: {
         type: String,
         match: [
-            /[a - z0 - 9!#$ %& '*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&' * +/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/, 'Please enter a valid email address'
+            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email address'
         ]
     },
     address: {
@@ -41,11 +41,11 @@ const BootCampSchema = new mongoose.Schema({
         type: {
             type: String, // Don't do `{ location: { type: String } }`
             enum: ['Point'], // 'location.type' must be 'Point'
-            required: true
+            // required: true
         },
         coordinates: {
             type: [Number],
-            required: true,
+            // required: true,
             index: '2dsphere'
         },
         formattedAddress: String,
@@ -102,4 +102,5 @@ const BootCampSchema = new mongoose.Schema({
 });
 
 
-module.exports = mogoose.model('Bootcamp', BootCampSchema);
+const Bootcamp = mongoose.model('Bootcamp', BootCampSchema);
+module.exports = Bootcamp;

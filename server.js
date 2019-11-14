@@ -6,6 +6,8 @@ const connectDB = require('./config/db');
 // Load env variables
 dotenv.config({ path: './config/config.env' });
 
+// SET our PORT
+const PORT = process.env.PORT || 5000;
 // Connect to our Database
 connectDB();
 
@@ -15,12 +17,17 @@ const bootcamps = require('./routes/bootcamp');
 
 // Create our Express Instance
 const app = express();  
-const PORT = process.env.PORT || 5000;
+
+// app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+
 
 // *** MIDDLEWARE *** //
 
 // Morgan MIDDLEWARE
-app.use(morgan('dev'));
+if(process.env_NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
 
 // Mount Routers
 app.use('/api/v1/devcamper', bootcamps);
