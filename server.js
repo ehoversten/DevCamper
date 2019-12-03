@@ -34,7 +34,7 @@ if(process.env.NODE_ENV === 'development') {
 
 // Mount Routers
 app.use('/api/v1/devcamper', bootcamps);
-
+// Error handler middleware
 app.use(errorHandler);
 
 // *** ERROR MIDDLEWARE *** //
@@ -53,7 +53,6 @@ app.use((error, req, res, next) =>{
     })
 });
 
-// app.use(errorHandler);
 
 
 // *** CONNECT SERVER *** //
