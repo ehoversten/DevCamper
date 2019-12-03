@@ -1,4 +1,5 @@
 const Bootcamp = require('../models/Bootcamp');
+const ErrorResponse = require('../utils/errorResponses');
 
 // @description        Get all bootcamps
 // @route              GET /api/v1/bootcamps
@@ -13,35 +14,33 @@ exports.getAllBootcamps = async (req, res, next) => {
             msg: "Retrieved All Bootcamps"
         })
     } catch(err){
-        console.log(err);
-        res.status(400).json({ success: false });
+        // console.log(err);
+        // res.status(400).json({ success: false });
+        next(err);
     }
-
 }
-
-
 
 // @description        Get single bootcamps
 // @route              GET /api/v1/bootcamps/:id
 // @access             Public
 exports.getBootcamp = async (req, res, next) => {
     try {
-        const bootcamp = await Bootcamp.findById({
-            _id: req.params.id
-        });
-    
-        res.status(200).json({ 
-            success: true, 
-            data: bootcamp,
-            msg: `Retrieved Bootcamp: ${bootcamp.id}`
-        })
-    } catch(err) {
-        console.log(err);
-        // res.status(400).json({
-        //     success: false,
-        //     msg: `Could not find Bootcamp: ${req.params.id}`
-        // });
+        const bootcamp = await Bootcamp.findById({_id: req.params.id});
 
+        // Bootcamp Not Found
+        if (!bootcamp) {
+            return next(new ErrorResponse(`Resource with id of ${req.params.id} not found`, 404));
+        }
+
+        // Bootcamp Found
+        res.status(200).json({
+            success: true,
+            data: bootcamp,
+            msg: `Retrieved Bootcamp: ${bootcamp.id}`,
+        });
+    } catch(err) {
+        // Log Error
+        // console.log(err);
         next(err);
     }
 }
@@ -63,8 +62,9 @@ exports.createBootcamp = async (req, res, next) => {
             msg: "Created new bootcamp"
         });
     } catch(err) {
-        console.log(err);
-        res.status(400).json({ success: false });
+        // console.log(err);
+        // res.status(400).json({ success: false });
+        next(err);
     }
 }
 
@@ -76,19 +76,31 @@ exports.updateBootcamp = async (req, res, next) => {
     console.log(req.body);
     console.log(req.params.id);
     try {
-        const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        });
+          const bootcamp = await Bootcamp.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {
+              new: true,
+              runValidators: true,
+            }
+          );
 
-        res.status(200).json({
-          success: true,
-          msg: `Updated bootcamp with id of ${req.params.id}`,
-          data: bootcamp,
-        });
-    } catch(err) {
-        console.log(err);
-        res.status(400).json({ success: false });
+          // Bootcamp Not Found
+          if (!bootcamp) {
+            return next(
+              new ErrorResponse(`Resource with id of ${req.params.id} not found`, 404)
+            );
+          }
+
+          res.status(200).json({
+            success: true,
+            msg: `Updated bootcamp with id of ${req.params.id}`,
+            data: bootcamp,
+          });
+        } catch(err) {
+        // console.log(err);
+        // res.status(400).json({ success: false });
+        next(err);
     }
 
     // res.status(200).json({ success: true, msg: `Updated bootcamp with id of ${req.params.id}` });
@@ -102,13 +114,21 @@ exports.deleteBootcamp = async (req, res, next) => {
     try {
         const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
 
-        res.status(200).json({ 
-            success: true, 
-            msg: `Bootcamp with id of ${req.params.id} deleted` 
+        // Bootcamp Not Found
+        if (!bootcamp) {
+            return next(
+                new ErrorResponse(`Resource with id of ${req.params.id} not found`,404)
+            );
+        }
+
+        res.status(200).json({
+        success: true,
+        msg: `Bootcamp with id of ${req.params.id} deleted`,
         });
     } catch(err) {
-        console.log(err);
-        res.status(400).json({ success: false });
+        // console.log(err);
+        // res.status(400).json({ success: false });
+        next(err);
     }
     
     // res.status(200).json({ success: true, msg: `Bootcamp with id of ${req.params.id} deleted` });
