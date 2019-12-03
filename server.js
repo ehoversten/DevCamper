@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
 const connectDB = require('./config/db');
+const logger = require('./middleware/logger');
 const errorHandler = require('./middleware/error');
 
 // Load env variables
@@ -24,8 +25,10 @@ app.use(express.json());
 
 // *** MIDDLEWARE *** //
 
-// Morgan MIDDLEWARE
-if(process.env_NODE_ENV === 'development') {
+// app.use(logger);
+
+// Morgan Logging MIDDLEWARE
+if(process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
