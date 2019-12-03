@@ -1,7 +1,9 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const colors = require('colors');
 const connectDB = require('./config/db');
+const errorHandler = require('./middleware/error');
 
 // Load env variables
 dotenv.config({ path: './config/config.env' });
@@ -14,13 +16,11 @@ connectDB();
 // Route Controller
 const bootcamps = require('./routes/bootcamp');
 
-
 // Create our Express Instance
 const app = express();  
 
 // app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-
 
 // *** MIDDLEWARE *** //
 
@@ -32,6 +32,7 @@ if(process.env_NODE_ENV === 'development') {
 // Mount Routers
 app.use('/api/v1/devcamper', bootcamps);
 
+app.use(errorHandler);
 
 // *** ERROR MIDDLEWARE *** //
 app.use((req, res, next) => {
@@ -49,9 +50,11 @@ app.use((error, req, res, next) =>{
     })
 });
 
+// app.use(errorHandler);
+
 
 // *** CONNECT SERVER *** //
 
 app.listen(PORT, function() {
-    console.log(`Server is in ${process.env.NODE_ENV} mode on PORT: ${PORT}`);
+    console.log(`Server is in ${process.env.NODE_ENV} mode on PORT: ${PORT}`.yellow.bold);
 }) 

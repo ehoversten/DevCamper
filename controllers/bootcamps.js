@@ -8,6 +8,7 @@ exports.getAllBootcamps = async (req, res, next) => {
         const bootcamps = await Bootcamp.find({ });
         res.status(200).json({ 
             success: true,
+            count: bootcamps.length,
             data: bootcamps,
             msg: "Retrieved All Bootcamps"
         })
@@ -36,10 +37,12 @@ exports.getBootcamp = async (req, res, next) => {
         })
     } catch(err) {
         console.log(err);
-        res.status(400).json({
-            success: false,
-            msg: `Could not find Bootcamp: ${req.params.id}`
-        })
+        // res.status(400).json({
+        //     success: false,
+        //     msg: `Could not find Bootcamp: ${req.params.id}`
+        // });
+
+        next(err);
     }
 }
 
