@@ -6,7 +6,20 @@ const ErrorResponse = require('../utils/errorResponses');
 // @access             Public
 exports.getAllBootcamps = async (req, res, next) => {
     try {
-        const bootcamps = await Bootcamp.find({ });
+        // Include Querys 
+        let query;
+        
+        let queryStr = JSON.stringify(req.query);
+        
+        
+        queryStr = queryStr.replace(/b(gt|gte|le|lte|in)\b/g, match => `$${match}`);
+        
+        // *** TESTING ***  //
+        // console.log(req.query);
+        // console.log(queryStr);
+        query = Bootcamp.find(JSON.parse(queryStr));
+
+        const bootcamps = await query;
         res.status(200).json({ 
             success: true,
             count: bootcamps.length,
@@ -14,8 +27,6 @@ exports.getAllBootcamps = async (req, res, next) => {
             msg: "Retrieved All Bootcamps"
         })
     } catch(err){
-        // console.log(err);
-        // res.status(400).json({ success: false });
         next(err);
     }
 }
@@ -39,8 +50,6 @@ exports.getBootcamp = async (req, res, next) => {
             msg: `Retrieved Bootcamp: ${bootcamp.id}`,
         });
     } catch(err) {
-        // Log Error
-        // console.log(err);
         next(err);
     }
 }
@@ -76,30 +85,28 @@ exports.updateBootcamp = async (req, res, next) => {
     console.log(req.body);
     console.log(req.params.id);
     try {
-          const bootcamp = await Bootcamp.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {
-              new: true,
-              runValidators: true,
-            }
-          );
+        const bootcamp = await Bootcamp.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {
+            new: true,
+            runValidators: true,
+        }
+        );
 
-          // Bootcamp Not Found
-          if (!bootcamp) {
-            return next(
-              new ErrorResponse(`Resource with id of ${req.params.id} not found`, 404)
-            );
-          }
+        // Bootcamp Not Found
+        if (!bootcamp) {
+        return next(
+            new ErrorResponse(`Resource with id of ${req.params.id} not found`, 404)
+        );
+        }
 
-          res.status(200).json({
-            success: true,
-            msg: `Updated bootcamp with id of ${req.params.id}`,
-            data: bootcamp,
-          });
-        } catch(err) {
-        // console.log(err);
-        // res.status(400).json({ success: false });
+        res.status(200).json({
+        success: true,
+        msg: `Updated bootcamp with id of ${req.params.id}`,
+        data: bootcamp,
+        });
+    } catch(err) {
         next(err);
     }
 
@@ -126,8 +133,6 @@ exports.deleteBootcamp = async (req, res, next) => {
         msg: `Bootcamp with id of ${req.params.id} deleted`,
         });
     } catch(err) {
-        // console.log(err);
-        // res.status(400).json({ success: false });
         next(err);
     }
     
