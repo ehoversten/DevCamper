@@ -16,6 +16,7 @@ connectDB();
 
 // Route Controller
 const bootcamps = require('./routes/bootcamp');
+const courses = require('./routes/course');
 
 // Create our Express Instance
 const app = express();  
@@ -34,6 +35,8 @@ if(process.env.NODE_ENV === 'development') {
 
 // Mount Routers
 app.use('/api/v1/devcamper', bootcamps);
+app.use('/api/v1/courses', courses);
+
 // Error handler middleware
 app.use(errorHandler);
 
