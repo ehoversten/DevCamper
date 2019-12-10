@@ -4,7 +4,8 @@ const {
     getCourses,
     getCourse,
     addCourse,
-    updateCourse
+    updateCourse,
+    deleteCourse
 } = require('../controllers/courses');
 
 
@@ -19,6 +20,7 @@ router
     .route('/:id')
     .get(getCourse)
     .put(updateCourse)
+    .delete(deleteCourse)
 
 // router.route('/', function(req, res) {
 //     getCourses();
